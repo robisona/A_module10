@@ -184,6 +184,10 @@ new.m7.output$r.squared
 # treatment organism is a categorical variable. We save the summary of each model for use later in comparing
 # models.
 
+#### I didn't use poisson distribution and obviously the results are different. The best model for flowers is different, 
+#### but for fruit production is the same
+#### My question is: for count data should we use always Poisson distribution? How did you know about that?
+
 m1p.flo.bas <- glm(flower.num ~ basal.diam, data = Data, family = "poisson")
 m1p.sum <- summary(m1p.flo.bas)
 
