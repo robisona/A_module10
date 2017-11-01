@@ -96,11 +96,11 @@ plot(m7)
 
 
 # Check collinearity of variables
-ggplot(data = buck, aes(x = bioassay.sp, y = basal.diam)) +
+ggplot(data = Data, aes(x = bioassay.sp, y = basal.diam)) +
   geom_boxplot() 
 # No systematic differences between basal diameters of different types of plants found
 
-ggplot(data = buck, aes(x = treatment.sp, y = basal.diam)) +
+ggplot(data = Data, aes(x = treatment.sp, y = basal.diam)) +
   geom_boxplot() 
 # No systematic differences between basal diameters of plants in different treatments found
 
@@ -114,15 +114,23 @@ ggplot(data = buck, aes(x = treatment.sp, y = basal.diam)) +
 # any of the potential outliers qualitatively affect the model results?  In other words, would you come to
 # a different conclusion about the effect of the predictors on height if you removed the outliers?
 
+par(mfrow = c(1,1))
+
+# Determine potential outliers with Q-Q Plot.
+plot(m7, which = 2)
+# Potential outliers include rows 13, 73, and 76.
+
+# Determine potential outliers with homogeneity of residuals
+plot(m7, which = 1)
+# Potential outliers include rows 13, 73, and 76.
 
 # Determine potential outliers with Cook's Distance
-par(mfrow = c(1,1))
-plot(m7, which =4)
-# Potential outliers include observations (rows) 13, 38, and 39.
+plot(m7, which = 4)
+# Potential outliers include rows 13, 38, and 39.
 
 
-# Remove potential outliers (13, 38, 39) from data set
-Data.out <- Data[-c(13,38,39), ]
+# Remove potential outliers (13, 38, 39, 73, 76) from data set
+Data.out <- Data[-c(13, 38, 39, 73, 76), ]
 
 
 # Check summary of original best fit model (includes all data points)
@@ -137,23 +145,16 @@ summary(new.m7)
 # Though model "new.m3.bas.tre.bio" (outliers removed) has higher unadjusted and adjusted R-squared values 
 # than model "m3.bas.tre.bio" (original best fit), and the exact estimates of some predictor variables have 
 # changed, I would not draw different conclusions about the effect of each predictor variable on height. 
-# One notable change, however, is that "factor(treatment.sp)Frangula", which previously had a P value of 
-# less than .05, now has a P value of less than .01. This change does not change my conclusion that treatment 
-# (in this case litter type) has a significant effect on plant height.
 
-#########################
-# Drew, how did you get it to give you new AIC values? I am getting an error due to a different number of
-# fitted observations
-#########################
-
-### I have the same error and for the same reason ###
 
 # Compare model fits using AIC
 aic.2 <- AIC(m7, new.m7)
-best.m.num <- which.min(aic.2$AIC)
-best.m.num
+aic.2
 # The model fit is imporved by removing outliers. The AIC improves from approximately 903 to 826.
 
+best.m.num <- which.min(aic.2$AIC)
+best.m.num
+# The lowest AIC value is the second one listed (826 for model "new.m7").
 
 # Summarize model output and examine calculated coefficients
 new.m7.output <- summary(new.m7)
@@ -184,9 +185,7 @@ new.m7.output$r.squared
 # treatment organism is a categorical variable. We save the summary of each model for use later in comparing
 # models.
 
-#### I didn't use poisson distribution and obviously the results are different. The best model for flowers is different, 
-#### but for fruit production is the same
-#### My question is: for count data should we use always Poisson distribution? How did you know about that?
+########## Flower Data ##########
 
 m1p.flo.bas <- glm(flower.num ~ basal.diam, data = Data, family = "poisson")
 m1p.sum <- summary(m1p.flo.bas)
@@ -240,3 +239,12 @@ plot(m5p.fru.tre, which = 4)
 
 # In 1-2 sentences, identify the contribution of each group member to the assignment.  Upload your .R file 
 # to submit your assignment in myCourses, one per group.
+
+# Group members individually completed each problem in the assignment but worked through GitHub to edit, test, and verify a final
+# code with components from each individual. Drew's base code was used for each problem, but Connor edited problems 1 and 2 
+# heavily, and Korik ran through all code making comments and edits as needed.
+
+
+
+
+
