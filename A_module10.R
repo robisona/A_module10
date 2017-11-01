@@ -146,6 +146,7 @@ summary(new.m7)
 # fitted observations
 #########################
 
+### I have the same error and for the same reason ###
 
 # Compare model fits using AIC
 aic.2 <- AIC(m7, new.m7)
